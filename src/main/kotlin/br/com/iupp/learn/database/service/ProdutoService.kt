@@ -12,6 +12,7 @@ import javax.inject.Singleton
 @Singleton
 class ProdutoService(private val produtoRepository: ProdutoRepository): ProdutoRepositoryPort {
     override fun create(produtoEntity: ProdutoEntity): Produto {
+        //TODO Enity
         produtoRepository.save(produtoEntity)
         return ProdutoConverter.produtoEntityToProduto(produtoEntity)
     }
