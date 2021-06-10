@@ -1,8 +1,8 @@
 package br.com.iupp.learn.entrypoint.controller
 
 import br.com.iupp.learn.core.model.Produto
-import br.com.iupp.learn.core.repository.ProdutoRepository
-import br.com.iupp.learn.entrypoint.dto.NovoProdutoRequest
+import br.com.iupp.learn.database.repository.ProdutoRepository
+import br.com.iupp.learn.entrypoint.dto.ProdutoDto
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.client.HttpClient
@@ -10,7 +10,6 @@ import io.micronaut.http.client.annotation.Client
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
-import org.mockito.Mockito
 import javax.inject.Inject
 
 @MicronautTest
@@ -45,7 +44,7 @@ internal class ProdutoControllerTest {
     @Test
     internal fun `deve inserir um produto`() {
         // cenário
-        val novoProdutoRequest = NovoProdutoRequest(
+        val novoProdutoRequest = ProdutoDto(
             nome = "Produto 1",
             descricao = "Produto muito bom",
             preco = 10.9,
@@ -83,7 +82,7 @@ internal class ProdutoControllerTest {
     @Test
     internal fun `deve atualizar um produto`() {
 
-        val novoProdutoRequest = NovoProdutoRequest(
+        val novoProdutoRequest = ProdutoDto(
             nome = "Produto Atualizado",
             descricao = "Produto muito bom",
             preco = 10.9,
