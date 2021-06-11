@@ -1,8 +1,9 @@
 package br.com.iupp.learn.entrypoint.controller
 
 import br.com.iupp.learn.core.model.Produto
-import br.com.iupp.learn.core.repository.ProdutoRepository
-import br.com.iupp.learn.entrypoint.dto.NovoProdutoRequest
+import br.com.iupp.learn.database.entity.ProdutoEntity
+import br.com.iupp.learn.database.repository.ProdutoRepository
+import br.com.iupp.learn.entrypoint.dto.ProdutoDto
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.client.HttpClient
@@ -10,7 +11,6 @@ import io.micronaut.http.client.annotation.Client
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
-import org.mockito.Mockito
 import javax.inject.Inject
 
 @MicronautTest
@@ -24,11 +24,11 @@ internal class ProdutoControllerTest {
     @field:Client("/")
     lateinit var client: HttpClient
 
-    lateinit var produto: Produto
+    lateinit var produto: ProdutoEntity
 
     @BeforeEach
     internal fun setup() {
-        produto = Produto(
+        produto = ProdutoEntity(
             nome = "Produto XYZ",
             descricao = "Produto muito bom",
             preco = 10.9,
@@ -45,7 +45,7 @@ internal class ProdutoControllerTest {
     @Test
     internal fun `deve inserir um produto`() {
         // cenário
-        val novoProdutoRequest = NovoProdutoRequest(
+        val novoProdutoRequest = ProdutoDto(
             nome = "Produto 1",
             descricao = "Produto muito bom",
             preco = 10.9,
@@ -64,7 +64,7 @@ internal class ProdutoControllerTest {
     internal fun `deve retornar os detalhes de um produto`() {
 
         val request: HttpRequest<Any> = HttpRequest.GET("/produtos/1")
-        val response = client.toBlocking().exchange(request, Produto::class.java)
+        val response = client.toBlocking().exchange(request, ProdutoEntity::class.java)
 
         assertEquals(HttpStatus.OK, response.status)
         assertEquals("Produto XYZ", response.body()!!.nome)
@@ -74,7 +74,7 @@ internal class ProdutoControllerTest {
     internal fun `deve deletar um produto`() {
 
         val request: HttpRequest<Any> = HttpRequest.DELETE("/produtos/2")
-        val response = client.toBlocking().exchange(request, Produto::class.java)
+        val response = client.toBlocking().exchange(request, ProdutoEntity::class.java)
 
         assertEquals(HttpStatus.OK, response.status)
 
@@ -83,7 +83,7 @@ internal class ProdutoControllerTest {
     @Test
     internal fun `deve atualizar um produto`() {
 
-        val novoProdutoRequest = NovoProdutoRequest(
+        val novoProdutoRequest = ProdutoDto(
             nome = "Produto Atualizado",
             descricao = "Produto muito bom",
             preco = 10.9,
@@ -91,7 +91,7 @@ internal class ProdutoControllerTest {
         )
 
         val request: HttpRequest<Any> = HttpRequest.PUT("/produtos/3", novoProdutoRequest)
-        val response = client.toBlocking().exchange(request, Produto::class.java)
+        val response = client.toBlocking().exchange(request, ProdutoEntity::class.java)
 
         assertEquals(HttpStatus.OK, response.status)
         assertEquals("Produto Atualizado", response.body()!!.nome)
